@@ -29,7 +29,7 @@ namespace Webshop
         {
             services.AddDbContext<ShopDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("ShopConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ShopDbContext>();
             services.AddControllersWithViews();
