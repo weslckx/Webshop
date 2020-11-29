@@ -6,7 +6,7 @@ using Webshop.Data.Repositories;
 
 namespace Webshop.Data.Persistence
 {
-    public class UnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
         //Setting my DbContext
         private readonly ShopDbContext _context;
