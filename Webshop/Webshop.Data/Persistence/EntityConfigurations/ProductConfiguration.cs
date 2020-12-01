@@ -13,9 +13,6 @@ namespace Webshop.Data.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder
-                .Property(t => t.Id)
-                .IsRequired();
-            builder
                 .Property(t => t.Name)
                 .HasColumnName("Productnaam")
                 .HasMaxLength(100)

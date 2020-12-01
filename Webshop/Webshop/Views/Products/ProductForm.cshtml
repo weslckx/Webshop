@@ -1,47 +1,47 @@
-﻿@model ViewModels.Product.ProductFormViewModel
+﻿@model ViewModels.ProductViewModels.ProductFormViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
 <div class="text-center">
-    <h1 class="display-4">@Model.FormTitle</h1>
+    <h1 class="display-4">Testing</h1>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Save">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="col-form-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="col-form-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescriptionShort" class="col-form-label"></label>
-                <input asp-for="DescriptionShort" class="form-control" />
-                <span asp-validation-for="DescriptionShort" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescriptionLong" class="col-form-label"></label>
-                <textarea asp-for="DescriptionLong" class="form-control"></textarea>
-                <span asp-validation-for="DescriptionLong" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="col-form-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Toevoegen" class="btn btn-primary" />
-            </div>
-        </form>
+@using (Html.BeginForm("Save", "Products"))
+{
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.Name)
+        @Html.TextBoxFor(p => p.Product.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.Name)
     </div>
-</div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.Price)
+        @Html.TextBoxFor(p => p.Product.Price, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.Price)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.DescriptionShort)
+        @Html.TextBoxFor(p => p.Product.DescriptionShort, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.DescriptionShort)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.ImageUrl)
+        @Html.TextBoxFor(p => p.Product.ImageUrl, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.ImageUrl)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.DescriptionLong)
+        @Html.TextAreaFor(p => p.Product.DescriptionLong, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.DescriptionLong)
+    </div>
+
+    @Html.HiddenFor(p=>p.Product.Id)
+    @Html.AntiForgeryToken()
+
+    <button type="submit" class="btn btn-primary">Check</button>
+}
+
+
 
 
 

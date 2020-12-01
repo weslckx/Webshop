@@ -25,6 +25,9 @@ namespace Webshop.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Problem with Id IdentityUserLogin
+            //https://stackoverflow.com/questions/40703615/the-entity-type-identityuserloginstring-requires-a-primary-key-to-be-defined
+            base.OnModelCreating(builder);
             builder.ApplyConfiguration(new ProductConfiguration());
         }
 
