@@ -21,6 +21,14 @@ namespace ViewModels.ProductViewModels
             }
         }
 
+        public string ButtonText
+        {
+            get
+            {
+                return (Product.Id != 0) ? "Pas product aan" : "Toevoegen";
+            }
+        }
+
   
     }
 }

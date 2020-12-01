@@ -37,6 +37,26 @@ namespace Webshop.Controllers
             return View("ProductForm", viewModel);
         }
 
+        public ActionResult EditProduct(int? id)
+        {
+            
+            if (id == null)
+                return NotFound();
+
+            var product = _unitOfWork.Products.Get((int)id);
+
+            if (product == null)
+                return NotFound();
+
+            var viewModel = new ProductFormViewModel
+            {
+                Product = product
+            };
+
+
+            return View("ProductForm", viewModel);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(ProductFormViewModel viewModel)
