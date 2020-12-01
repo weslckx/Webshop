@@ -14,6 +14,10 @@ using Microsoft.Extensions.Hosting;
 using Webshop.Data;
 using Webshop.Data.Repositories;
 using Webshop.Data.Persistence;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using ViewModels.ProductViewModels;
+using ViewModels.FluentValidationConfig;
 
 namespace Webshop
 {
@@ -39,7 +43,13 @@ namespace Webshop
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ShopDbContext>();
-            services.AddControllersWithViews();
+
+            services.AddControllersWithViews().AddFluentValidation();
+
+            services.AddTransient<IValidator<ProductFormViewModel>, ProductFormViewModelValidator>();
+
+
+
             services.AddRazorPages();
         }
 
