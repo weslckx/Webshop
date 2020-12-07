@@ -11,6 +11,7 @@ namespace ViewModels.FluentValidationConfig
         public ProductFormViewModelValidator()
         {
             RuleFor(x => x.Product.DescriptionLong).NotEmpty().WithMessage("Helaba daar");
+          
         }
 
     }
