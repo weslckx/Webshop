@@ -81,6 +81,10 @@ namespace Webshop.Controllers
 
                 _unitOfWork.Complete();
             }
+            else
+            {
+                return View("ProductForm",viewModel);
+            }
 
 
             return RedirectToAction("Index", "Products");

@@ -10,8 +10,9 @@ namespace Webshop.Domain.Models
         public int Id { get; set; }
         [Display(Name="Productnaam")]
         public string Name { get; set; }
+        
         [Display(Name = "Prijs")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         [Display(Name = "Korte omschrijving")]
         public string DescriptionShort { get; set; }
         [Display(Name = "Grote omschrijving")]
