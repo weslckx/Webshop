@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.Product;
+using ViewModels.ProductViewModels;
 using Webshop.Data.Repositories;
 using Webshop.Domain.Models;
 
@@ -26,41 +26,75 @@ namespace Webshop.Controllers
             return View(products);
         }
 
+
         public ActionResult NewProduct()
         {
-            var viewModel = new ProductFormViewModel();
+            var viewModel = new ProductFormViewModel
+            {
+                Product = new Product() // niet vergeten te initialiseren!!!
+            };
+
+            return View("ProductForm", viewModel);
+        }
+
+        public ActionResult EditProduct(int? id)
+        {
+            
+            if (id == null)
+                return NotFound();
+
+            var product = _unitOfWork.Products.Get((int)id);
+
+            if (product == null)
+                return NotFound();
+
+            var viewModel = new ProductFormViewModel
+            {
+                Product = product
+            };
+
 
             return View("ProductForm", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(Product product)
+        public ActionResult Save(ProductFormViewModel viewModel)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-               // Nog implementeren
-            }
+                if (viewModel.Product.Id == 0)
+                {
+                    _unitOfWork.Products.Add(viewModel.Product);
+                }
+                else
+                {
+                    // Perhaps DTO and automapper, need to read!
+                    var productInDb = _unitOfWork.Products.Get(viewModel.Product.Id);
 
-            if (product.Id==0)
-            {
-                _unitOfWork.Products.Add(product);
+                    productInDb.Name = viewModel.Product.Name;
+                    productInDb.DescriptionShort = viewModel.Product.DescriptionShort;
+                    productInDb.DescriptionLong = viewModel.Product.DescriptionLong;
+                    productInDb.Price = viewModel.Product.Price;
+                    productInDb.ImageUrl = viewModel.Product.ImageUrl;
+                }
+
+                _unitOfWork.Complete();
             }
             else
             {
-                var productInDb = _unitOfWork.Products.Get(product.Id);
-
-                productInDb.Name = product.Name;
-                productInDb.DescriptionShort = product.DescriptionShort;
-                productInDb.DescriptionLong = product.DescriptionLong;
-                productInDb.Price = product.Price;
-                productInDb.ImageUrl = product.ImageUrl;
+                return View("ProductForm",viewModel);
             }
-
-            _unitOfWork.Complete();
 
 
             return RedirectToAction("Index", "Products");
+        }
+
+        public ActionResult ProductDetails(int id)
+        {
+            var product = _unitOfWork.Products.Get(id);
+
+            return View(product);
         }
     }
 }
