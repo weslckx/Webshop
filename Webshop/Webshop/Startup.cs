@@ -45,6 +45,7 @@ namespace Webshop
 
             //DI Identity + opslaan/kijken in ShopDbContext
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>() // configuring roles, volgorde belangrijk!
                 .AddEntityFrameworkStores<ShopDbContext>();
 
             services.AddControllersWithViews().AddFluentValidation();
@@ -126,6 +127,45 @@ namespace Webshop
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+
+            // Create adminuser
+           // CreateUserRoles(serviceProvider).Wait();
         }
+
+
+        #region script userroles: admin (commented out)
+        // https://stackoverflow.com/questions/42471866/how-to-create-roles-in-asp-net-core-and-assign-them-to-users
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            RoleManager<IdentityRole> RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            ShopDbContext Context = serviceProvider.GetRequiredService<ShopDbContext>();
+
+            IdentityResult roleResult;
+            // Adding Admin Role.
+            bool roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                // create the roles and seed them to the database.
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            // Assign Admin role to the main user.
+            IdentityUser user = Context.Users.FirstOrDefault(u => u.Email == "email@example.com"); //email from admin
+            if (user != null)
+            {
+                DbSet<IdentityUserRole<string>> userRoles = Context.UserRoles;
+                IdentityRole adminRole = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
+                if (adminRole != null)
+                {
+                    if (!userRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
+                    {
+                        userRoles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
+                        Context.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
