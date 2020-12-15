@@ -89,5 +89,12 @@ namespace Webshop.Controllers
 
             return RedirectToAction("Index", "Products");
         }
+
+        public ActionResult ProductDetails(int id)
+        {
+            var product = _unitOfWork.Products.Get(id);
+
+            return View(product);
+        }
     }
 }
