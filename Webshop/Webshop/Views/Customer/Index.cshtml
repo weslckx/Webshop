@@ -1,0 +1,8 @@
+﻿@model ViewModels.CustomerViewModel
+
+
+<div class="form-group">
+    @Html.LabelFor(c => c.Customer.FirstName)
+    @Html.TextBoxFor(c => c.Customer.FirstName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(c => c.Customer.FirstName)
+</div>
