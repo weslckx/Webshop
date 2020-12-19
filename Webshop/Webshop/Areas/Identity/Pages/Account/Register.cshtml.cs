@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ViewModels;
+using Webshop.Data.Repositories;
 
 namespace Webshop.Areas.Identity.Pages.Account
 {
@@ -24,12 +26,16 @@ namespace Webshop.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+        private readonly IUnitOfWork _unitOfWork;
+
         public RegisterModel(
+            IUnitOfWork unitOfWork,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -46,6 +52,23 @@ namespace Webshop.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name ="Voornaam")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Achternaam")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "Adres")]
+            public string Address { get; set; }
+
+            [Required]
+            [Display(Name = "Postcode")]
+            public string Zipcode { get; set; }
+
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -53,11 +76,11 @@ namespace Webshop.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Wachtwoord")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Bevestig Wachtwoord")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
@@ -74,10 +97,30 @@ namespace Webshop.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                //own
+                var registerViewModel = new RegisterViewModel
+                {
+                    Customer = new Domain.Models.Customer
+                    {
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        Address = Input.Address,
+                        Zipcode = Input.Zipcode
+                        
+                    }
+                };
+
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    // koppeling
+                    registerViewModel.Customer.WebshopUserId = user.Id;
+                    //toevoeging
+                    _unitOfWork.Customers.Add(registerViewModel.Customer);
+                    _unitOfWork.Complete();
+    
+                    
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

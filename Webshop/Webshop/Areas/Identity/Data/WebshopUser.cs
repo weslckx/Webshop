@@ -8,7 +8,7 @@ using Webshop.Domain.Models;
 namespace Webshop.Areas.Identity.Data
 {
     [PersonalData]
-    public class WebshopUser: IdentityUser
+    public class WebshopUser
     {
         public string Name { get; set; }
 
@@ -19,5 +19,7 @@ namespace Webshop.Areas.Identity.Data
         public string ZipCode { get; set; }
   
         public string City { get; set; }
+
+        // nog deleten
     }
 }
