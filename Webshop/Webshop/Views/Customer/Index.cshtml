@@ -1,0 +1,23 @@
+﻿@model ViewModels.CustomerViewModel
+
+
+<div class="form-group">
+    @Html.LabelFor(c => c.Customer.FirstName)
+    @Html.TextBoxFor(c => c.Customer.FirstName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(c => c.Customer.FirstName)
+</div>
+<div class="form-group">
+    @Html.LabelFor(c => c.Customer.LastName)
+    @Html.TextBoxFor(c => c.Customer.LastName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(c => c.Customer.LastName)
+</div>
+<div class="form-group">
+    @Html.LabelFor(c => c.Customer.Address)
+    @Html.TextBoxFor(c => c.Customer.Address, new { @class = "form-control" })
+    @Html.ValidationMessageFor(c => c.Customer.Address)
+</div>
+<div class="form-group">
+    @Html.LabelFor(c => c.Customer.Zipcode)
+    @Html.TextBoxFor(c => c.Customer.Zipcode, new { @class = "form-control" })
+    @Html.ValidationMessageFor(c => c.Customer.Zipcode)
+</div>

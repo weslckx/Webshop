@@ -39,9 +39,13 @@ namespace Webshop
                     Configuration.GetConnectionString("ShopConnection")));
 
             
+
+            
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
+            //DI Identity + opslaan/kijken in ShopDbContext
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>() // configuring roles, volgorde belangrijk!
                 .AddEntityFrameworkStores<ShopDbContext>();
 
             services.AddControllersWithViews().AddFluentValidation();
@@ -51,10 +55,51 @@ namespace Webshop
 
 
             services.AddRazorPages();
+
+
+
+            #region IdentityOptions Config
+            // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 12;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
+            #endregion
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider) //serviceProvider for roles
         {
             if (env.IsDevelopment())
             {
@@ -82,6 +127,45 @@ namespace Webshop
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+
+            // Create adminuser
+           // CreateUserRoles(serviceProvider).Wait();
         }
+
+
+        #region script userroles: admin (commented out)
+        // https://stackoverflow.com/questions/42471866/how-to-create-roles-in-asp-net-core-and-assign-them-to-users
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            RoleManager<IdentityRole> RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            ShopDbContext Context = serviceProvider.GetRequiredService<ShopDbContext>();
+
+            IdentityResult roleResult;
+            // Adding Admin Role.
+            bool roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                // create the roles and seed them to the database.
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            // Assign Admin role to the main user.
+            IdentityUser user = Context.Users.FirstOrDefault(u => u.Email == "email@example.com"); //email from admin
+            if (user != null)
+            {
+                DbSet<IdentityUserRole<string>> userRoles = Context.UserRoles;
+                IdentityRole adminRole = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
+                if (adminRole != null)
+                {
+                    if (!userRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
+                    {
+                        userRoles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
+                        Context.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }

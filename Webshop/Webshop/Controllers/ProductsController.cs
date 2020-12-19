@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.ProductViewModels;
+using Webshop.Areas.Identity.Data;
 using Webshop.Data.Repositories;
 using Webshop.Domain.Models;
 
 namespace Webshop.Controllers
 {
+    [Authorize(Roles =RoleName.Admin)]
+
     public class ProductsController : Controller
     {
         //DI
@@ -89,7 +93,7 @@ namespace Webshop.Controllers
 
             return RedirectToAction("Index", "Products");
         }
-
+        [AllowAnonymous]
         public ActionResult ProductDetails(int id)
         {
             var product = _unitOfWork.Products.Get(id);
