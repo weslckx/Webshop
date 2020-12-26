@@ -9,10 +9,11 @@
 
 <p>Cart</p>
 
-@foreach (var item in Model.products)
+@foreach (var item in Model.cartItems)
 {
-    <p>Naam: @item.Name</p>
-    <p>Subtotaal: @item.Price</p>
+    <p>Naam: @item.Product.Name</p>
+    <p>Subtotaal: @item.SubTotal</p>
+    <p>Quantity: @item.Quantity. </p>
 }
 
 <p>Totaal: @Model.Total</p>

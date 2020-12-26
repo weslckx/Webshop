@@ -6,7 +6,8 @@ using System.Text;
 namespace Webshop.Domain.Models
 {
     [NotMapped]
-    class Cart
+    public class Cart
     {
+        public List<CartItem> CartItems { get; set; }
     }
 }

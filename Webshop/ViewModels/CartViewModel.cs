@@ -7,15 +7,15 @@ namespace ViewModels
 {
     public class CartViewModel
     {
-        public List<Product> products { get; set; }
+        public List<CartItemViewModel> cartItems { get; set; }
         public virtual string Total
         {
             get
             {
                 double sum = 0;
-                foreach (var product in products)
+                foreach (var product in cartItems)
                 {
-                    sum += (double)product.Price;
+                    sum += product.SubTotal;
                 }
 
                 return sum.ToString("€ "+"0.00");

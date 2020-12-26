@@ -6,6 +6,6 @@ namespace Webshop.Services
 {
     interface ICart
     {
-        void AddProductToCart(int productId);
+        void AddProductToCart(int productId, int quantity);
     }
 }
