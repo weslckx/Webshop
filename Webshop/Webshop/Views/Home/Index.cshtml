@@ -27,11 +27,12 @@
                     <th scope="col">@product.Price</th>
                     <th scope="col">@product.DescriptionShort</th>
                     <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
-                    <th scope="col"><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">Bekijk dit product!</a> <br/>
-                    @if (this.User.IsInRole("Admin"))
-                    {
-                    <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk dit product!</a>
-                    }
+                    <th scope="col">
+                        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">Bekijk dit product!</a> <br />
+                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Voeg toe aan winkelmandje!</a> <br />
+                        @if (this.User.IsInRole("Admin"))
+                        {
+                    <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk dit product!</a>}
                     </th>
 
                 </tr>

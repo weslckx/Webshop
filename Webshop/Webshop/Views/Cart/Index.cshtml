@@ -11,5 +11,8 @@
 
 @foreach (var item in Model.products)
 {
-    <p>@item.Name</p>
+    <p>Naam: @item.Name</p>
+    <p>Subtotaal: @item.Price</p>
 }
+
+<p>Totaal: @Model.Total</p>

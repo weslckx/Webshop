@@ -38,14 +38,14 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult AddToCart(int productId, int quantity=1)
+        public IActionResult AddToCart(int id, int quantity=1)
         {
 
             var cartItem = new List<CartItem>();
 
             cartItem.Add(new CartItem
             {
-                ProductId = productId,
+                ProductId = id,
                 Quantity = quantity
             });
 
@@ -61,13 +61,6 @@ namespace Webshop.Controllers
                 var newCart = existingCart + '|' + cartItems;
                 Response.Cookies.Append(cartCookie, newCart);
             }
-
-           
-
-                
-
-        
-           
 
             return RedirectToAction("Index", "Home");
         }
