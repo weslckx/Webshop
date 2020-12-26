@@ -68,7 +68,7 @@ namespace Webshop
             services.AddSession(options =>
             {
                 options.Cookie.Name = "Cart";
-                options.Cookie.MaxAge = TimeSpan.FromDays(365);
+                options.Cookie.MaxAge = TimeSpan.FromDays(365); // not erasing cookie when closing window
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             }
