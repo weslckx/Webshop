@@ -1,4 +1,4 @@
-﻿
+﻿@model ViewModels.CartViewModel
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -7,4 +7,9 @@
 }
 
 
-<p>@ViewData["id"]</p>
+<p>Cart</p>
+
+@foreach (var item in Model.products)
+{
+    <p>@item.Name</p>
+}

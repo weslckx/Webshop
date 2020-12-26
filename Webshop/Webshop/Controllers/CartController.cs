@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Webshop.Data.Repositories;
 using Webshop.Domain.Models;
+using System.Web;
+using ViewModels;
 
 namespace Webshop.Controllers
 {
@@ -36,25 +38,59 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult AddToCart(int productId)
+        public IActionResult AddToCart(int productId, int quantity=1)
         {
-           
+
+            var cartItem = new List<CartItem>();
+
+            cartItem.Add(new CartItem
+            {
+                ProductId = productId,
+                Quantity = quantity
+            });
+
+            string cartItems = string.Join(";", cartItem);
 
             if (Request.Cookies[cartCookie]==null)
             {
-                var cart = new List<CartItem>();
-
-                cart.Add(new CartItem
-                {
-                    ProductId = productId,
-                    Quantity=1
-                });
-
-                Response.Cookies.Append(cartCookie, cart.ToString());
-               
+                Response.Cookies.Append(cartCookie, cartItems);
+            }
+            else
+            {
+                var existingCart = Request.Cookies[cartCookie];
+                var newCart = existingCart + '|' + cartItems;
+                Response.Cookies.Append(cartCookie, newCart);
             }
 
-            return View("Index");
+           
+
+                
+
+        
+           
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult ViewMyCart()
+        {
+            var cart = Request.Cookies[cartCookie];
+            var cartViewModel = new CartViewModel
+            {
+                products = new List<Product>()
+            };
+
+            var cartItems = cart.Split('|');
+
+            foreach (var item in cartItems)
+            {
+               var carItemDetails = item.Split(';');
+               var product= _unitOfWork.Products.Get(int.Parse(carItemDetails[0]));
+               cartViewModel.products.Add(product);
+
+            }
+
+            return View("Index",cartViewModel);
         }
 
        
