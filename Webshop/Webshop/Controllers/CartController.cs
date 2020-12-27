@@ -68,8 +68,22 @@ namespace Webshop.Controllers
         public IActionResult ViewMyCart()
         {
 
-            var cart = Request.Cookies[cookieName];
-            var cartItems = cart.Split('|');
+            return View("Index",GetCart());
+        }
+
+
+        public IActionResult DeleteFromCart(int id)
+        {
+
+            return View();
+        }
+
+
+
+        private CartViewModel GetCart()
+        {
+            var cartContent = Request.Cookies[cookieName];
+            string[] cartItems = cartContent.Split('|'); // check if null!
 
             CartViewModel viewModel = new CartViewModel
             {
@@ -78,28 +92,24 @@ namespace Webshop.Controllers
 
             foreach (var item in cartItems)
             {
-               CartItemViewModel itemViewModel = new CartItemViewModel();
+                string[] cartItemDetails = item.Split(';');
+                int productId = int.Parse(cartItemDetails[0]); //tryparse
+                int quantity = int.Parse(cartItemDetails[1]);
+                
+                Product product = _unitOfWork.Products.Get(productId);
+                
 
-               var carItemDetails = item.Split(';');
-               var product= _unitOfWork.Products.Get(int.Parse(carItemDetails[0]));
+                CartItemViewModel cartItemViewModel = new CartItemViewModel
+                {
+                    Product=product,
+                    Quantity = quantity
+                };
 
-                itemViewModel.Product = product;
-                itemViewModel.Quantity = int.Parse(carItemDetails[1]);
-
-                //hier
-                viewModel.cartItems.Add(itemViewModel);
-
-            
+                viewModel.cartItems.Add(cartItemViewModel);
             }
 
-            return View("Index",viewModel);
-        }
 
-
-        public IActionResult DeleteFromCart(int id)
-        {
-
-            return View();
+            return viewModel;
         }
 
        
