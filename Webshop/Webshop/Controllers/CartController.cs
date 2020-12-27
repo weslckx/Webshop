@@ -38,39 +38,24 @@ namespace Webshop.Controllers
 
             AddToCart(cartItem);
 
-   // to delete:
-            //string cartItems = string.Join(";",cartItem);
-
-            //if (cartCookie==null)
-            //{
-            //    Response.Cookies.Append(cookieName, cartItems);
-            //}
-            //else
-            //{
-            //    var existingCart = Request.Cookies[cookieName];
-            //    var newCart = existingCart + '|' + cartItems;
-            //    Response.Cookies.Append(cookieName, newCart);
-            //}
-
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult DeleteFromCart(int? id)
+        public IActionResult RemoveFromCart(int? id)
         {
             if (id==null)
             {
                 return NotFound();
             }
 
-            RemoveFromCart((int)id, GetCart());
+            RemoveFromCart((int)id);
 
 
-            
-
-            return View();
+            return RedirectToAction("Index", "Cart");
         }
 
 
+        //private methods
 
         private CartViewModel GetCart()
         {
@@ -82,7 +67,7 @@ namespace Webshop.Controllers
                 cartItems = new List<CartItemViewModel>()
             };
 
-            if (cartContent!=null)
+            if (!string.IsNullOrEmpty(cartContent)) // damn ""
             {
                 cartItems = cartContent.Split('|'); // check if null! Otherwise error
 
@@ -113,20 +98,17 @@ namespace Webshop.Controllers
 
         }
 
-        private void RemoveFromCart(int id, CartViewModel cartViewModel)
+        private void RemoveFromCart(int id)
         {
-            foreach (var item in cartViewModel.cartItems)
+            var cart = GetCart();
+
+            CartItemViewModel obj = cart.cartItems.FirstOrDefault(i => i.Product.Id == id);
+
+            if (obj!=null)
             {
-                if (item.Product.Id==id)
-                {
-                    cartViewModel.cartItems.Remove(item);
-                }
+                cart.cartItems.Remove(obj); //if cart.cartitems=0, mss lege cookie implementeren?
+                Response.Cookies.Append(cookieName, BuildCart(cart));
             }
-
-            
-            
-
-
         }
 
         private void AddToCart(CartItem cartItem)
@@ -135,7 +117,7 @@ namespace Webshop.Controllers
             string newCart = null;
             string cartitems = string.Join(';', cartItem);
 
-            if (cartCookie==null)
+            if (string.IsNullOrEmpty(cartCookie))
             {
                 Response.Cookies.Append(cookieName, cartitems);
             }

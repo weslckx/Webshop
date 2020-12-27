@@ -8,7 +8,7 @@
 
 <p>Cart</p>
 
-@if (Model.cartItems.Count==0)
+@if (Model.cartItems.Count == 0)
 {
     <p>Nog geen items toevoegd aan cart</p>
 }
@@ -19,6 +19,9 @@ else
         <p>Naam: @item.Product.Name</p>
         <p>Subtotaal: @item.SubTotal</p>
         <p>Quantity: @item.Quantity. </p>
+        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.Product.Id">Verwijder</a>
+        <br />
+
     }
 
     <p>Totaal: @Model.Total</p>
