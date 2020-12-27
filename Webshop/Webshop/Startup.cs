@@ -18,6 +18,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using ViewModels.ProductViewModels;
 using ViewModels.FluentValidationConfig;
+using Microsoft.AspNetCore.Http;
 
 namespace Webshop
 {
@@ -55,6 +56,23 @@ namespace Webshop
 
 
             services.AddRazorPages();
+
+            //shoppingbag
+            // https://docs.microsoft.com/en-us/aspnet/core/security/gdpr?view=aspnetcore-3.1
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            //services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "Cart";
+                options.Cookie.MaxAge = TimeSpan.FromDays(365); // not erasing cookie when closing window
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            }
+            ) ;
 
 
 
@@ -114,6 +132,11 @@ namespace Webshop
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            //shoppingbag
+            app.UseCookiePolicy();
+            app.UseSession();
+           
 
             app.UseRouting();
 
