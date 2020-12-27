@@ -23,19 +23,21 @@ namespace Webshop.Controllers
 
         public IActionResult Index()
         {
-            string key = "MyCart";
-            string value = "testing";
+            //string key = "MyCart";
+            //string value = "testing";
 
-            CookieOptions cookieOptions = new CookieOptions
-            {
-                Expires = DateTime.Now.AddDays(365)
-            };
+            //CookieOptions cookieOptions = new CookieOptions
+            //{
+            //    Expires = DateTime.Now.AddDays(365)
+            //};
 
-            Response.Cookies.Append(key, value,cookieOptions);
+            //Response.Cookies.Append(key, value,cookieOptions);
 
 
 
-            return View();
+            //return View();
+
+            return View("Index",GetCart());
         }
 
         public IActionResult AddToCart(int id, int quantity=1)
@@ -65,15 +67,17 @@ namespace Webshop.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult ViewMyCart()
+        public IActionResult DeleteFromCart(int? id)
         {
+            if (id==null)
+            {
+                return NotFound();
+            }
 
-            return View("Index",GetCart());
-        }
+            RemoveFromCart((int)id, GetCart());
 
 
-        public IActionResult DeleteFromCart(int id)
-        {
+            
 
             return View();
         }
@@ -83,35 +87,76 @@ namespace Webshop.Controllers
         private CartViewModel GetCart()
         {
             var cartContent = Request.Cookies[cookieName];
-            string[] cartItems = cartContent.Split('|'); // check if null!
+            string[] cartItems = null;
 
             CartViewModel viewModel = new CartViewModel
             {
                 cartItems = new List<CartItemViewModel>()
             };
 
-            foreach (var item in cartItems)
+            if (cartContent!=null)
             {
-                string[] cartItemDetails = item.Split(';');
-                int productId = int.Parse(cartItemDetails[0]); //tryparse
-                int quantity = int.Parse(cartItemDetails[1]);
-                
-                Product product = _unitOfWork.Products.Get(productId);
-                
+                cartItems = cartContent.Split('|'); // check if null! Otherwise error
 
-                CartItemViewModel cartItemViewModel = new CartItemViewModel
+
+                foreach (var item in cartItems)
                 {
-                    Product=product,
-                    Quantity = quantity
-                };
+                    string[] cartItemDetails = item.Split(';');
+                    int productId = int.Parse(cartItemDetails[0]); //tryparse
+                    int quantity = int.Parse(cartItemDetails[1]);
 
-                viewModel.cartItems.Add(cartItemViewModel);
+                    Product product = _unitOfWork.Products.Get(productId);
+
+
+                    CartItemViewModel cartItemViewModel = new CartItemViewModel
+                    {
+                        Product = product,
+                        Quantity = quantity
+                    };
+
+                    viewModel.cartItems.Add(cartItemViewModel);
+                }
+
+
+                
             }
-
-
             return viewModel;
+
+
         }
 
+        private void RemoveFromCart(int id, CartViewModel cartViewModel)
+        {
+            foreach (var item in cartViewModel.cartItems)
+            {
+                if (item.Product.Id==id)
+                {
+                    cartViewModel.cartItems.Remove(item);
+                }
+            }
+
+            
+            
+
+
+        }
+
+        private void BuildCart()
+        {
+
+        }
+
+        private CartViewModel AddToCart()
+        {
+            var cartCookie = Request.Cookies[cookieName];
+
+            if (cartCookie==null)
+            {
+
+            }
+
+            return null;
+        }
        
     }
 }

@@ -1,5 +1,4 @@
 ﻿@model ViewModels.CartViewModel
-
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -9,11 +8,20 @@
 
 <p>Cart</p>
 
-@foreach (var item in Model.cartItems)
+@if (Model.cartItems.Count==0)
 {
-    <p>Naam: @item.Product.Name</p>
-    <p>Subtotaal: @item.SubTotal</p>
-    <p>Quantity: @item.Quantity. </p>
+    <p>Nog geen items toevoegd aan cart</p>
+}
+else
+{
+    @foreach (var item in Model.cartItems)
+    {
+        <p>Naam: @item.Product.Name</p>
+        <p>Subtotaal: @item.SubTotal</p>
+        <p>Quantity: @item.Quantity. </p>
+    }
+
+    <p>Totaal: @Model.Total</p>
 }
 
-<p>Totaal: @Model.Total</p>
+
