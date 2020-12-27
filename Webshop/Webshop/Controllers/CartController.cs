@@ -8,6 +8,7 @@ using Webshop.Data.Repositories;
 using Webshop.Domain.Models;
 using System.Web;
 using ViewModels;
+using System.Text;
 
 namespace Webshop.Controllers
 {
@@ -23,46 +24,33 @@ namespace Webshop.Controllers
 
         public IActionResult Index()
         {
-            //string key = "MyCart";
-            //string value = "testing";
-
-            //CookieOptions cookieOptions = new CookieOptions
-            //{
-            //    Expires = DateTime.Now.AddDays(365)
-            //};
-
-            //Response.Cookies.Append(key, value,cookieOptions);
-
-
-
-            //return View();
 
             return View("Index",GetCart());
         }
 
         public IActionResult AddToCart(int id, int quantity=1)
         {
-            var cartCookie = Request.Cookies[cookieName];
-            var cartItem = new List<CartItem>();
-
-            cartItem.Add(new CartItem
+            var cartItem = new CartItem
             {
                 ProductId = id,
                 Quantity = quantity
-            });
+            };
 
-            string cartItems = string.Join(";", cartItem);
+            AddToCart(cartItem);
 
-            if (cartCookie==null)
-            {
-                Response.Cookies.Append(cookieName, cartItems);
-            }
-            else
-            {
-                var existingCart = Request.Cookies[cookieName];
-                var newCart = existingCart + '|' + cartItems;
-                Response.Cookies.Append(cookieName, newCart);
-            }
+   // to delete:
+            //string cartItems = string.Join(";",cartItem);
+
+            //if (cartCookie==null)
+            //{
+            //    Response.Cookies.Append(cookieName, cartItems);
+            //}
+            //else
+            //{
+            //    var existingCart = Request.Cookies[cookieName];
+            //    var newCart = existingCart + '|' + cartItems;
+            //    Response.Cookies.Append(cookieName, newCart);
+            //}
 
             return RedirectToAction("Index", "Home");
         }
@@ -141,21 +129,61 @@ namespace Webshop.Controllers
 
         }
 
-        private void BuildCart()
-        {
-
-        }
-
-        private CartViewModel AddToCart()
+        private void AddToCart(CartItem cartItem)
         {
             var cartCookie = Request.Cookies[cookieName];
+            string newCart = null;
+            string cartitems = string.Join(';', cartItem);
 
             if (cartCookie==null)
             {
+                Response.Cookies.Append(cookieName, cartitems);
+            }
+            else
+            {
+                var cart = GetCart();
+                CartItemViewModel cartItemViewModel = new CartItemViewModel
+                {
+                    Product = _unitOfWork.Products.Get(cartItem.ProductId),
+                    Quantity = cartItem.Quantity
+                };
+
+                CartItemViewModel obj = cart.cartItems.FirstOrDefault(i => i.Product.Id == cartItem.ProductId);
+
+                if (obj!=null)
+                {
+                    obj.Quantity++;
+                    newCart = BuildCart(cart);
+                }
+                else
+                {
+                    newCart = cartCookie + '|' + cartitems;
+                }
+
+                Response.Cookies.Append(cookieName, newCart);
 
             }
+        }
 
-            return null;
+        private string BuildCart(CartViewModel viewModel)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var item in viewModel.cartItems)
+            {
+                builder.Append(item.Product.Id.ToString());
+                builder.Append(';');
+                builder.Append(item.Quantity.ToString());
+
+                if (viewModel.cartItems.IndexOf(item)!=viewModel.cartItems.Count-1)
+                {
+                    builder.Append('|');
+                }
+               
+            }
+
+            return builder.ToString();
+
         }
        
     }
