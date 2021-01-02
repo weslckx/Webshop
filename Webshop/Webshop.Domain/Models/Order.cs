@@ -10,9 +10,10 @@ namespace Webshop.Domain.Models
         public DateTime OrderPlaced { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
+        public string Email { get; set; }
         public string Address { get; set; }
         public string ZipCode { get; set; }
-        public decimal OrderTotal { get; set; }
+        //public decimal OrderTotal { get; set; }
         public List<OrderDetail> OrderLines { get; set; }
         public int? CustomerId { get; set; } // nullable?
 

@@ -80,5 +80,11 @@ namespace Webshop.Controllers
 
             
         }
+
+        [HttpPost]
+        public IActionResult CheckOut(OrderViewModel viewModel)
+        {
+            return null;
+        }
     }
 }

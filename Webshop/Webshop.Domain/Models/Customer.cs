@@ -19,6 +19,8 @@ namespace Webshop.Domain.Models
         public string Zipcode { get; set; }
 
         public string WebshopUserId { get; set; }
+
+        public List<Order> Orders { get; set; }
         //public WebShopUser WebshopUser { get; set; } 
         // Hmm, om dit toe te voegen reference nodig naar mijn Data
         // zo opvragen door toe te voegen aan order? Valt nog af te wachten
