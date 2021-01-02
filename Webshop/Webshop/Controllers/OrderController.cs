@@ -23,62 +23,65 @@ namespace Webshop.Controllers
             _unitOfWork = unitOfWork;
         }
 
+
         public IActionResult CheckOut()
         {
-            //CartViewModel cartViewModel = TempData["Cart"] as CartViewModel;
-
-            CartViewModel cartViewModel = TempData.Get<CartViewModel>("Cart");
-
-            if (cartViewModel != null)
-            {
-               
-                OrderViewModel orderViewModel = new OrderViewModel
-                {
-                    //Cart = cartViewModel,
-                    Order = new Order
-                    {
-                        OrderLines = new List<OrderDetail>()
-                    }
-                };
-
-                foreach (var item in cartViewModel.cartItems)
-                {
-                    OrderDetail orderDetail = new OrderDetail
-                    {
-                        ProductId = item.Product.Id,
-                        Subtotal = item.Quantity * (decimal)item.Product.Price
-                        
-                    };
-
-                    orderViewModel.Order.OrderLines.Add(orderDetail);
-                }
-
-
-                if (User.Identity.IsAuthenticated)
-                {
-                    var webshopUserId = _userManager.GetUserId(User);
-                    Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(webshopUserId);
-
-                    if (customer != null)
-                    {
-                        orderViewModel.IsAuthenticated = true;
-
-                        orderViewModel.Order.Address = customer.Address;
-                        orderViewModel.Order.FirstName = customer.FirstName;
-                        orderViewModel.Order.LastName = customer.LastName;
-                        orderViewModel.Order.ZipCode = customer.Zipcode;
-                    }
-                    else return NotFound();
-
-                }
-                else orderViewModel.IsAuthenticated = false;
 
 
 
-                return View(orderViewModel);
-            }
-            else return NotFound();
+            //CartViewModel cartViewModel = TempData.Get<CartViewModel>("Cart");
 
+            //if (cartViewModel != null)
+            //{
+
+            //    OrderViewModel orderViewModel = new OrderViewModel
+            //    {
+            //        //Cart = cartViewModel,
+            //        Order = new Order
+            //        {
+            //            OrderLines = new List<OrderDetail>()
+            //        }
+            //    };
+
+            //    foreach (var item in cartViewModel.cartItems)
+            //    {
+            //        OrderDetail orderDetail = new OrderDetail
+            //        {
+            //            ProductId = item.Product.Id,
+            //            Subtotal = item.Quantity * (decimal)item.Product.Price
+
+            //        };
+
+            //        orderViewModel.Order.OrderLines.Add(orderDetail);
+            //    }
+
+
+            //    if (User.Identity.IsAuthenticated)
+            //    {
+            //        var webshopUserId = _userManager.GetUserId(User);
+            //        Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(webshopUserId);
+
+            //        if (customer != null)
+            //        {
+            //            orderViewModel.IsAuthenticated = true;
+
+            //            orderViewModel.Order.Address = customer.Address;
+            //            orderViewModel.Order.FirstName = customer.FirstName;
+            //            orderViewModel.Order.LastName = customer.LastName;
+            //            orderViewModel.Order.ZipCode = customer.Zipcode;
+            //        }
+            //        else return NotFound();
+
+            //    }
+            //    else orderViewModel.IsAuthenticated = false;
+
+
+
+            //    return View(orderViewModel);
+            //}
+            //else return NotFound();
+
+            return View();
         }
     }
 }

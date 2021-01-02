@@ -1,14 +1,11 @@
-﻿@model ViewModels.OrderViewModel
+﻿
+<p>Checkout</p>
 
 
-
-<div class="form-group"  >
+@*<div class="form-group"  >
     @Html.LabelFor(c => c.Order.FirstName)
     @Html.TextBoxFor(c => c.Order.FirstName, new { @class = "form-control"})
     @Html.ValidationMessageFor(c => c.Order.FirstName)
-</div>
+</div>*@
 
-@foreach (var item in Model.Order.OrderLines)
-{
-    <p>@item.Subtotal</p>
-}
+

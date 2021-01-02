@@ -11,6 +11,8 @@ using ViewModels;
 using System.Text;
 using Newtonsoft.Json;
 using Webshop.HelperClasses;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Webshop.Controllers
 {
@@ -18,10 +20,12 @@ namespace Webshop.Controllers
     {
         string cookieName = "MyCart";
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -37,8 +41,21 @@ namespace Webshop.Controllers
             TempData.Put("Cart", GetCart());
             //https://stackoverflow.com/questions/56528508/asp-net-core-tempdata-and-redirecttoaction-not-working
 
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("CheckOut", "Order");
+            }
+
+            return View("LoginOrContinue");
+        }
+
+        [Authorize]
+        public IActionResult PendingOrderLogin()
+        {
             return RedirectToAction("CheckOut", "Order");
         }
+
+        
 
 
         public IActionResult AddToCart(int id, int quantity=1)
