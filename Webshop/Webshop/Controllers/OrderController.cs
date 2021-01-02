@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ViewModels;
 using Webshop.Data.Repositories;
 using Webshop.Domain.Models;
+using Webshop.HelperClasses;
 
 namespace Webshop.Controllers
 {
@@ -23,24 +25,60 @@ namespace Webshop.Controllers
 
         public IActionResult CheckOut()
         {
-            var order = new Order();
+            //CartViewModel cartViewModel = TempData["Cart"] as CartViewModel;
 
-            if (User.Identity.IsAuthenticated)
+            CartViewModel cartViewModel = TempData.Get<CartViewModel>("Cart");
+
+            if (cartViewModel != null)
             {
-                var webshopUserId = _userManager.GetUserId(User);
-                Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(webshopUserId);
-
-                if (customer != null)
+               
+                OrderViewModel orderViewModel = new OrderViewModel
                 {
-                    order.Address = customer.Address;
-                    order.FirstName = customer.FirstName;
-                    order.LastName = customer.LastName;
-                    order.ZipCode = customer.Zipcode;
-                }
-                else return NotFound();
+                    //Cart = cartViewModel,
+                    Order = new Order
+                    {
+                        OrderLines = new List<OrderDetail>()
+                    }
+                };
 
+                foreach (var item in cartViewModel.cartItems)
+                {
+                    OrderDetail orderDetail = new OrderDetail
+                    {
+                        ProductId = item.Product.Id,
+                        Subtotal = item.Quantity * (decimal)item.Product.Price
+                        
+                    };
+
+                    orderViewModel.Order.OrderLines.Add(orderDetail);
+                }
+
+
+                if (User.Identity.IsAuthenticated)
+                {
+                    var webshopUserId = _userManager.GetUserId(User);
+                    Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(webshopUserId);
+
+                    if (customer != null)
+                    {
+                        orderViewModel.IsAuthenticated = true;
+
+                        orderViewModel.Order.Address = customer.Address;
+                        orderViewModel.Order.FirstName = customer.FirstName;
+                        orderViewModel.Order.LastName = customer.LastName;
+                        orderViewModel.Order.ZipCode = customer.Zipcode;
+                    }
+                    else return NotFound();
+
+                }
+                else orderViewModel.IsAuthenticated = false;
+
+
+
+                return View(orderViewModel);
             }
-            return View(order);
+            else return NotFound();
+
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿@model Webshop.Domain.Models.Order
+﻿@model ViewModels.OrderViewModel
 
 
 
-<div class="form-group">
-    @Html.LabelFor(c => c.FirstName)
-    @Html.TextBoxFor(c => c.FirstName, new { @class = "form-control" })
-    @Html.ValidationMessageFor(c => c.FirstName)
+<div class="form-group"  >
+    @Html.LabelFor(c => c.Order.FirstName)
+    @Html.TextBoxFor(c => c.Order.FirstName, new { @class = "form-control"})
+    @Html.ValidationMessageFor(c => c.Order.FirstName)
 </div>
-<div class="form-group">
-    @Html.LabelFor(c => c.FirstName)
-    @Html.TextBoxFor(c => c.FirstName, new { @class = "form-control" })
-    @Html.ValidationMessageFor(c => c.FirstName)
-</div>
+
+@foreach (var item in Model.Order.OrderLines)
+{
+    <p>@item.Subtotal</p>
+}

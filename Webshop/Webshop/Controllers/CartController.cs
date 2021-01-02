@@ -9,6 +9,8 @@ using Webshop.Domain.Models;
 using System.Web;
 using ViewModels;
 using System.Text;
+using Newtonsoft.Json;
+using Webshop.HelperClasses;
 
 namespace Webshop.Controllers
 {
@@ -27,6 +29,17 @@ namespace Webshop.Controllers
 
             return View("Index",GetCart());
         }
+
+        public IActionResult PendingCheckOut()
+        {
+           // TempDataExtensions.Put(TempData,"Cart", GetCart());
+
+            TempData.Put("Cart", GetCart());
+            //https://stackoverflow.com/questions/56528508/asp-net-core-tempdata-and-redirecttoaction-not-working
+
+            return RedirectToAction("CheckOut", "Order");
+        }
+
 
         public IActionResult AddToCart(int id, int quantity=1)
         {

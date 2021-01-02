@@ -5,7 +5,7 @@ using Webshop.Domain.Models;
 
 namespace ViewModels
 {
-    class OrderViewModel
+    public class OrderViewModel
     {
         public Order Order { get; set; }
         public CartViewModel Cart { get; set; }

@@ -13,7 +13,7 @@ namespace Webshop.Domain.Models
         public string Address { get; set; }
         public string ZipCode { get; set; }
         public decimal OrderTotal { get; set; }
-        public IEnumerable<OrderDetail> OrderLines { get; set; }
+        public List<OrderDetail> OrderLines { get; set; }
 
     }
 }
