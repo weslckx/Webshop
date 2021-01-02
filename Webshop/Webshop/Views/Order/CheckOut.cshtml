@@ -23,5 +23,12 @@
     @Html.ValidationMessageFor(c => c.customer.Zipcode)
 </div>
 
+<h1>Jouw bestelling:</h1>
+
+@foreach (var item in Model.Order.OrderLines)
+{
+    <p>@item.Product.Name</p>
+}
+
 
 
