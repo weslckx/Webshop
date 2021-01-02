@@ -26,9 +26,29 @@ namespace Webshop.Controllers
 
         public IActionResult CheckOut()
         {
+            OrderViewModel orderViewModel = new OrderViewModel
+            {
+                customer = new Customer()
+            };
 
 
+            if (User.Identity.IsAuthenticated)
+            {
 
+                var userId = _userManager.GetUserId(User);
+                Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(userId);
+
+                if (customer!= null)
+                {
+                    orderViewModel.customer = customer;
+                    orderViewModel.Email = _userManager.GetUserName(User);
+
+                }
+
+
+            }
+
+           
             //CartViewModel cartViewModel = TempData.Get<CartViewModel>("Cart");
 
             //if (cartViewModel != null)
@@ -81,7 +101,7 @@ namespace Webshop.Controllers
             //}
             //else return NotFound();
 
-            return View();
+            return View(orderViewModel);
         }
     }
 }

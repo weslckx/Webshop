@@ -14,6 +14,7 @@ namespace Webshop.Domain.Models
         public string ZipCode { get; set; }
         public decimal OrderTotal { get; set; }
         public List<OrderDetail> OrderLines { get; set; }
+        public int? CustomerId { get; set; } // nullable?
 
     }
 }
