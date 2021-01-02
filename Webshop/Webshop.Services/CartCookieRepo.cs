@@ -7,12 +7,11 @@ namespace Webshop.Services
 {
     class CartCookieRepo : ICart
     {
-        private Cart Cart { get; set; }
         private CartItem CartItem { get; set; }
 
         public CartCookieRepo()
         {
-            this.Cart = new Cart();
+          
             this.CartItem = new CartItem();
         }
 
