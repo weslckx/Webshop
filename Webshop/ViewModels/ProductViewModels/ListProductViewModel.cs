@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Webshop.Domain.Models;
 
-namespace ViewModels
+namespace ViewModels.ProductViewModels
 {
     public class ListProductViewModel
     {

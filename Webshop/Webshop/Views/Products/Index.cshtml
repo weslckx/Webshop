@@ -1,7 +1,5 @@
 ﻿@model IEnumerable<Webshop.Domain.Models.Product>
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
 <div class="text-center">
 
@@ -19,19 +17,18 @@
         <tbody>
             @foreach (var product in Model)
             {
-                <tr>
-                    <th scope="col">@product.Id</th>
-                    <th scope="col">@product.Name</th>
-                    <th scope="col">@product.Price</th>
-                    <th scope="col">@product.DescriptionShort</th>
-                    <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
-                    <th scope="col">@Html.ActionLink("Bewerken", "EditProduct", new { id = product.Id },null) </th>
-                </tr>
-            }
+<tr>
+    <th scope="col">@product.Id</th>
+    <th scope="col">@product.Name</th>
+    <th scope="col">@product.Price</th>
+    <th scope="col">@product.DescriptionShort</th>
+    <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
+    <th scope="col">@Html.ActionLink("Bewerken", "EditProduct", new { id = product.Id }, null) </th>
+</tr>            }
         </tbody>
     </table>
 
 
-    @Html.ActionLink("Voeg product toe","NewProduct","Products")
+    @Html.ActionLink("Voeg product toe", "NewProduct", "Products")
 
 </div>

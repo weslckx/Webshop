@@ -1,9 +1,17 @@
-﻿@model IEnumerable<Webshop.Domain.Models.Product>
+﻿@model ViewModels.ProductViewModels.ListProductViewModel
 
-@{
-    ViewData["Title"] = "Home Page";
-}
+@{ ViewData["Title"] = "Home Page"; }
 
+<form asp-controller="Home" asp-action="Search" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Zoek op Artikel:
+            <input asp-for="ProductSearch" />
+            <input type="submit" value="Zoek product" class="btn btn-default" /> |
+            <a asp-controller="Home" asp-action="Index">Terug naar alle producten</a>
+        </p>
+    </div>
+</form>
 
 
 <table class="table">
@@ -18,25 +26,23 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in Model)
+        @foreach (var product in Model.Products)
         {
-                <tr>
+<tr>
 
-                    <th scope="col">@product.Id</th>
-                    <th scope="col">@product.Name</th>
-                    <th scope="col">@product.Price</th>
-                    <th scope="col">@product.DescriptionShort</th>
-                    <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
-                    <th scope="col">
-                        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">Bekijk dit product!</a> <br />
-                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Voeg toe aan winkelmandje!</a> <br />
-                        @if (this.User.IsInRole("Admin"))
-                        {
-                    <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk dit product!</a>}
-                    </th>
+    <th scope="col">@product.Id</th>
+    <th scope="col">@product.Name</th>
+    <th scope="col">@product.Price</th>
+    <th scope="col">@product.DescriptionShort</th>
+    <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
+    <th scope="col">
+        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">Bekijk dit product!</a> <br />
+        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Voeg toe aan winkelmandje!</a> <br />
+        @if (this.User.IsInRole("Admin"))
+        {
+<a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk dit product!</a>}
+    </th>
 
-                </tr>
-
-        }
+</tr>}
     </tbody>
 </table>

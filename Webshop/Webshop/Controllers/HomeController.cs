@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ViewModels.ProductViewModels;
 using Webshop.Data.Repositories;
 
 namespace Webshop.Controllers
@@ -22,21 +23,31 @@ namespace Webshop.Controllers
 
         public IActionResult Index()
         {
-            var products = _unitOfWork.Products.GetAll();
-            return View(products);
+            ListProductViewModel viewModel = new ListProductViewModel
+            {
+                Products = _unitOfWork.Products.GetAll().ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult Search(ListProductViewModel viewModel)
+        {
+            if (!string.IsNullOrWhiteSpace(viewModel.ProductSearch))
+            {
+                viewModel.Products = _unitOfWork.Products.Find(p => p.Name.Contains(viewModel.ProductSearch)).ToList();
+            }
+            else
+            {
+                viewModel.Products = _unitOfWork.Products.GetAll().ToList();
+            }
+
+            return View("Index", viewModel);
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
-
-
-        //Nog te verhuizen naar ViewModels
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
     }
 }

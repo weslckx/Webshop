@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ViewModels;
 using ViewModels.ProductViewModels;
 using Webshop.Areas.Identity.Data;
 using Webshop.Data.Repositories;
@@ -26,8 +27,10 @@ namespace Webshop.Controllers
 
         public ActionResult Index()
         {
-            var products =_unitOfWork.Products.GetAll();
+
+            var products = _unitOfWork.Products.GetAll();
             return View(products);
+
         }
 
 
