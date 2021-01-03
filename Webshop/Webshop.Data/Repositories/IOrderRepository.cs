@@ -7,5 +7,6 @@ namespace Webshop.Data.Repositories
 {
    public interface IOrderRepository: IRepository<Order>
     {
+        IEnumerable<Order> GetOrdersWithProducts(int id);
     }
 }

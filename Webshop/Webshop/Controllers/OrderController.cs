@@ -117,6 +117,26 @@ namespace Webshop.Controllers
             return View(viewModel);
         }
 
+        public IActionResult OrderHistory()
+        {
+            var userId = _userManager.GetUserId(User);
+            Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(userId);
+
+            var orders = _unitOfWork.Orders.GetOrdersWithProducts(customer.CustomerId);
+
+            OrderHistoryViewModel viewModel = new OrderHistoryViewModel
+            {
+                Orders = orders
+            };
+
+            
+
+            
+
+
+            return View(viewModel);
+        }
+
    
     }
 }

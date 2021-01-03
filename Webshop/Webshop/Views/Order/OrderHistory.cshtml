@@ -1,0 +1,14 @@
+﻿@model ViewModels.OrderHistoryViewModel
+
+@foreach (var item in Model.Orders)
+{
+    <p>OrderID: @item.Id</p>
+    <p>Datum: @item.OrderPlaced</p>
+
+    foreach (var product in item.OrderLines)
+    {
+            <p>Product: @product.Product.Name</p>
+            <p>Hoeveelheid: @product.Quantity</p>
+
+    }
+}
