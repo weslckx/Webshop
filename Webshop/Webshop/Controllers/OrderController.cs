@@ -69,7 +69,6 @@ namespace Webshop.Controllers
         public IActionResult CheckOut(OrderViewModel viewModel)
         {
             
-           
             if (ModelState.IsValid)
             {
                 var order = new Order
@@ -100,33 +99,22 @@ namespace Webshop.Controllers
                     order.OrderLines.Add(orderDetail);
                 }
 
-
-
                 _unitOfWork.Orders.Add(order);
                 _unitOfWork.Complete();
 
-                //var OrderLines = new List<OrderDetail>();
+                var orderCompleteViewModel = new OrderCompletedViewModel
+                {
+                    Date = order.OrderPlaced,
+                    OrderId = order.Id
+                };
 
-                //foreach (var product in viewModel.OrderDetails)
-                //{
-                //    var orderDetail = new OrderDetail
-                //    {
-                //        OrderId = order.Id,
-                //        ProductId = product.Id,
-                //        Quantity = product.Quantity
-                //    };
+                // Clear cart -> in the future as service
+                Response.Cookies.Append("MyCart", "");
 
-                    
-                //}
-
-                //var orderId = order.Id;
-
-              
-                
-
+                return View("CheckOutCompleted",orderCompleteViewModel);
             }
 
-            return RedirectToAction("Index", "Cart");
+            return View(viewModel);
         }
 
    
