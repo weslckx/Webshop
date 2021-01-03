@@ -36,13 +36,10 @@ namespace Webshop.Controllers
             if (!string.IsNullOrWhiteSpace(viewModel.ProductSearch))
             {
                 viewModel.Products = _unitOfWork.Products.Find(p => p.Name.Contains(viewModel.ProductSearch)).ToList();
-            }
-            else
-            {
-                viewModel.Products = _unitOfWork.Products.GetAll().ToList();
+                return View("Index", viewModel);
             }
 
-            return View("Index", viewModel);
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()
