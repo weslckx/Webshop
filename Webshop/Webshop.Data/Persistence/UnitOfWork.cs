@@ -14,11 +14,14 @@ namespace Webshop.Data.Persistence
 
         public ICustomerRepository Customers { get; private set; }
 
+        public IOrderRepository Orders { get; private set; }
+
         public UnitOfWork(ShopDbContext context)
         {
             this._context = context;
             Products = new ProductRepository(_context);
             Customers = new CustomerRepository(_context);
+            Orders = new OrderRepository(_context);
 
         }
 
