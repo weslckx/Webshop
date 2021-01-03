@@ -26,19 +26,19 @@ namespace Webshop.Controllers
         //Get
         public IActionResult CheckOut()
         {
-            CartViewModel cartViewModel = TempData.Get<CartViewModel>("Cart");
+            OrderViewModel orderViewModel = new OrderViewModel();
+            CartViewModel cartItems = TempData.Get<CartViewModel>("Cart");
 
-            if (cartViewModel!=null)
+            if (cartItems!=null)
             {
-                OrderViewModel orderViewModel = new OrderViewModel
-                {
-                    customer = new Customer(),
-                    OrderDetails = new List<OrderDetail>()
-
-                };
 
 
-                if (User.Identity.IsAuthenticated)
+                orderViewModel.Cart = cartItems.cartItems; // overview cart
+                orderViewModel.customer = new Customer(); // initialising
+               
+
+
+                if (User.Identity.IsAuthenticated) // user logged in? Get data from user, else guest need to give his data
                 {
 
                     var userId = _userManager.GetUserId(User);
@@ -53,22 +53,10 @@ namespace Webshop.Controllers
 
                 }
 
-                foreach (var item in cartViewModel.cartItems)
-                {
-                    OrderDetail orderDetail = new OrderDetail
-                    {
-                        ProductId = item.Product.Id,
-                        Product = item.Product,
-                        Quantity = item.Quantity
-                    };
-
-                    orderViewModel.OrderDetails.Add(orderDetail);
-                }
-
                 return View("CheckOut",orderViewModel);
             }
 
-
+            // If cart is empty
             return RedirectToAction("Index", "Cart");
 
            
@@ -80,23 +68,62 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CheckOut(OrderViewModel viewModel)
         {
-            var order = new Order
-            {
-                CustomerId = viewModel.customer.CustomerId,
-                FirstName = viewModel.customer.FirstName,
-                LastName = viewModel.customer.LastName,
-                Address = viewModel.customer.Address,
-                Email = viewModel.Email,
-                ZipCode = viewModel.customer.Zipcode,
-                OrderPlaced = DateTime.Now
-            };
-
             
-       
-
+           
             if (ModelState.IsValid)
             {
-               
+                var order = new Order
+                {
+                    FirstName = viewModel.customer.FirstName,
+                    LastName = viewModel.customer.LastName,
+                    Address = viewModel.customer.Address,
+                    Email = viewModel.Email,
+                    ZipCode = viewModel.customer.Zipcode,
+                    OrderPlaced = DateTime.Now,
+                    OrderLines = new List<OrderDetail>()
+                    
+                };
+
+                if (viewModel.customer.CustomerId !=0)
+                {
+                    order.CustomerId = viewModel.customer.CustomerId; // add ID only when logged in as customer.
+                }
+
+                foreach (var item in viewModel.Cart)
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        ProductId = item.Product.Id,
+                        Quantity = item.Quantity
+                    };
+
+                    order.OrderLines.Add(orderDetail);
+                }
+
+
+
+                _unitOfWork.Orders.Add(order);
+                _unitOfWork.Complete();
+
+                //var OrderLines = new List<OrderDetail>();
+
+                //foreach (var product in viewModel.OrderDetails)
+                //{
+                //    var orderDetail = new OrderDetail
+                //    {
+                //        OrderId = order.Id,
+                //        ProductId = product.Id,
+                //        Quantity = product.Quantity
+                //    };
+
+                    
+                //}
+
+                //var orderId = order.Id;
+
+              
+                
+
             }
 
             return RedirectToAction("Index", "Cart");

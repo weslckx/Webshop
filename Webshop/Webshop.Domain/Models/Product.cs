@@ -19,5 +19,6 @@ namespace Webshop.Domain.Models
         public string DescriptionLong { get; set; }
         [Display(Name = "Link naar afbeelding")]
         public string ImageUrl { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }
