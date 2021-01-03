@@ -7,8 +7,7 @@ namespace ViewModels
 {
     public class OrderViewModel
     {
-        public Order Order { get; set; }
-        public bool IsAuthenticated { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
         public Customer customer { get; set; }
         public string Email { get; set; }
     }

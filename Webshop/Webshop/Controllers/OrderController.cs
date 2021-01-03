@@ -33,10 +33,7 @@ namespace Webshop.Controllers
                 OrderViewModel orderViewModel = new OrderViewModel
                 {
                     customer = new Customer(),
-                    Order = new Order
-                    {
-                        OrderLines = new List<OrderDetail>()
-                    }
+                    OrderDetails = new List<OrderDetail>()
 
                 };
 
@@ -50,13 +47,11 @@ namespace Webshop.Controllers
                     if (customer != null)
                     {
                         orderViewModel.customer = customer;
-                        orderViewModel.Email = _userManager.GetUserName(User);
-
+                        orderViewModel.Email = User.Identity.Name;
                     }
                     else return NotFound();
 
                 }
-
 
                 foreach (var item in cartViewModel.cartItems)
                 {
@@ -67,10 +62,10 @@ namespace Webshop.Controllers
                         Quantity = item.Quantity
                     };
 
-                    orderViewModel.Order.OrderLines.Add(orderDetail);
+                    orderViewModel.OrderDetails.Add(orderDetail);
                 }
 
-                return View(orderViewModel);
+                return View("CheckOut",orderViewModel);
             }
 
 
@@ -82,9 +77,31 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CheckOut(OrderViewModel viewModel)
         {
-            return null;
+            var order = new Order
+            {
+                CustomerId = viewModel.customer.CustomerId,
+                FirstName = viewModel.customer.FirstName,
+                LastName = viewModel.customer.LastName,
+                Address = viewModel.customer.Address,
+                Email = viewModel.Email,
+                ZipCode = viewModel.customer.Zipcode,
+                OrderPlaced = DateTime.Now
+            };
+
+            
+       
+
+            if (ModelState.IsValid)
+            {
+               
+            }
+
+            return RedirectToAction("Index", "Cart");
         }
+
+   
     }
 }
