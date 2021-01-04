@@ -17,46 +17,58 @@
             </p>
         </div>
     </form>*@
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="~/css/products.css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ProductId</th>
-            <th scope="col">Naam</th>
-            <th scope="col">Prijs</th>
-            <th scope="col">Korte omschrijving</th>
-            <th scope="col">Afbeelding</th>
-            <th scope="col">Detail</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-<tr>
+        <div class="row">
 
-    <th scope="col">@product.Id</th>
-    <th scope="col">@product.Name</th>
-    <th scope="col">@product.Price</th>
-    <th scope="col">@product.DescriptionShort</th>
-    <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
-    <th scope="col">
-        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">Bekijk dit product!</a> <br />
-        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Voeg toe aan winkelmandje!</a> <br />
-        @if (this.User.IsInRole("Admin"))
-        {
-<a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk dit product!</a>}
-    </th>
+            @foreach (var product in Model)
+            {
+    <div class="col-md-4">
+        <figure class="card card-product">
+            <div class="img-wrap"><img src="@product.ImageUrl"></div>
+            <figcaption class="info-wrap">
+                <h4 class="title">@product.Name</h4>
+                <p class="desc">@product.DescriptionShort</p>
+                <div class="admin-wrap">
+                    <div class="label-rating">Edit</div>
+                </div> <!-- rating-wrap.// -->
+            </figcaption>
+            <div class="bottom-wrap">
+                <a href="" class="btn btn-sm btn-primary float-right">Toevoegen aan winkelkar</a>
+                <div class="price-wrap h5">
+                    <span class="price-new">€ @product.Price</span> <del class="price-old"></del>
+                </div> <!-- price-wrap.// -->
+            </div> <!-- bottom-wrap.// -->
+        </figure>
+    </div> <!-- col // -->}
 
-</tr>}
-    </tbody>
-</table>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    @Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class = $"btn btn-outline-warning {prevDisabled}" })
+                    @Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex + 1 }, new { @class = $"btn btn-outline-warning {nextDisabled}" })
+                </div>
+            </div>
+        </div>
+
+         
+        
+        <br />
+        <br />
+        <br />
+    </div>
+
+    
+</body>
 
 
-@Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class=$"btn btn-default {prevDisabled}" })
-@Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex +1 }, new { @class = $"btn btn-default {nextDisabled}" })
-
-@*<a asp-action="Index" asp-route-pageNumber="@Model.PageIndex-1"
-   class="btn btn-default @prevDisabled">Previous</a>
-<a asp-action="Index" asp-route-pageNumber="@Model.PageIndex+1"
-   class="btn btn-default @nextDisabled">Next</a>*@ 

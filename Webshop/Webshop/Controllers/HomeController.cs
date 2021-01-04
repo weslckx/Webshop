@@ -31,7 +31,7 @@ namespace Webshop.Controllers
 
             //var products = await _unitOfWork.Products.GetAll();
 
-            return View(await PaginatedList<Product>.CreateAsync(productList, pageNumber, 5));
+            return View(await PaginatedList<Product>.CreateAsync(productList, pageNumber, 6));
 
             //ListProductViewModel viewModel = new ListProductViewModel
             //{
