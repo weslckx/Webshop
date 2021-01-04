@@ -33,3 +33,24 @@
 .card-product .price-old {
     color: #999;
 }
+
+a.product:link, a.product:visited {
+    color: #1F1300;
+    text-decoration: none;
+}
+
+a.product:hover {
+    color: #AF9B46;
+    text-decoration: none;
+}
+
+a.btn-cart {
+    background-color: #1F1300;
+    color: #AF9B46;
+}
+
+a.btn-cart:hover {
+        background-color: #AF9B46;
+        color: #1F1300;
+    }
+

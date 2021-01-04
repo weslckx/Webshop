@@ -24,6 +24,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
+
     <div class="container">
 
 
@@ -32,22 +33,28 @@
             @foreach (var product in Model)
             {
     <div class="col-md-4">
-        <figure class="card card-product">
-            <div class="img-wrap"><img src="@product.ImageUrl"></div>
-            <figcaption class="info-wrap">
-                <h4 class="title">@product.Name</h4>
-                <p class="desc">@product.DescriptionShort</p>
-                <div class="admin-wrap">
-                    <div class="label-rating">Edit</div>
-                </div> <!-- rating-wrap.// -->
-            </figcaption>
-            <div class="bottom-wrap">
-                <a href="" class="btn btn-sm btn-primary float-right">Toevoegen aan winkelkar</a>
-                <div class="price-wrap h5">
-                    <span class="price-new">€ @product.Price</span> <del class="price-old"></del>
-                </div> <!-- price-wrap.// -->
-            </div> <!-- bottom-wrap.// -->
-        </figure>
+        <a class="product" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">
+            <figure class="card card-product">
+                <div class="img-wrap"><img src="@product.ImageUrl"></div>
+                <figcaption class="info-wrap">
+                    <h4 class="title">@product.Name</h4>
+                    <p class="desc">@product.DescriptionShort</p>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <div class="admin-wrap">
+                            <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk product</a> |
+                            <a asp-controller="Products" asp-action="DeleteProduct" asp-route-id="@product.Id">Delete product</a>
+                        </div> <!-- rating-wrap.// -->
+                    }
+                </figcaption>
+                <div class="bottom-wrap">
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id" class="btn-cart btn-sm btn-primary float-right">In winkelmand</a>
+                    <div class="price-wrap h5">
+                        <span class="price-new">€ @product.Price</span> <del class="price-old"></del>
+                    </div> <!-- price-wrap.// -->
+                </div> <!-- bottom-wrap.// -->
+            </figure>
+        </a>
     </div> <!-- col // -->}
 
         </div>
@@ -55,8 +62,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    @Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class = $"btn btn-outline-warning {prevDisabled}" })
-                    @Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex + 1 }, new { @class = $"btn btn-outline-warning {nextDisabled}" })
+                    @Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class = $"btnPage btn-outline-warning {prevDisabled}" })
+                    @Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex + 1 }, new { @class = $"btnPage btn-outline-warning {nextDisabled}" })
                 </div>
             </div>
         </div>
@@ -70,5 +77,15 @@
 
     
 </body>
+
+@section scripts{ 
+    <script>
+        $(document).ready(function () {
+            $(".btn-cart").click(function () {
+                alert("Toegevoegd aan winkelkar");
+            });
+        });
+    </script>
+}
 
 

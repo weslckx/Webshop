@@ -6,15 +6,9 @@
 }
 
 
-<p>Cart</p>
 
-@if (Model.cartItems.Count == 0)
-{
-    <p>Nog geen items toevoegd aan cart</p>
-}
-else
-{
-    @foreach (var item in Model.cartItems)
+
+    @*@foreach (var item in Model.cartItems)
     {
         <p>Naam: @item.Product.Name</p>
         <p>Subtotaal: @item.SubTotal</p>
@@ -25,9 +19,86 @@ else
     }
 
     <p>Totaal: @Model.Total</p>
-    <a asp-controller="Cart" asp-action="PendingCheckOut">Bestellen</a>
+    <a asp-controller="Cart" asp-action="PendingCheckOut">Bestellen</a>*@
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    @*<link rel="stylesheet" href="~/css/cart.css" />*@
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<body>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Jouw winkelmand</h1>
+        </div>
+    </section>
+
+    @if (Model.cartItems.Count != 0)
+    {
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col"> </th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Prijs</th>
+                                    <th scope="col" class="text-center">Aantal stuks</th>
+                                    <th scope="col" class="text-right">Subtotaal</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in Model.cartItems)
+                                {
+                <tr>
+                    <td><img height="50" width="50" src="@product.Product.ImageUrl" /> </td>
+                    <td>@product.Product.Name</td>
+                    <td>€ @product.Product.Price</td>
+                    <td>@product.Quantity</td>
+                    <td class="text-right">@product.SubTotalText</td>
+                    <td class="text-right"><a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@product.Product.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> </td>
+                </tr>}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>Totaal</strong></td>
+                                    <td class="text-right"><strong>@Model.Total</strong></td>
+                                </tr>
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+                <div class="col mb-2">
+                    <div class="row">
+                        <div class="col-sm-12  col-md-6">
+                            <button class="btn btn-block btn-light">Continue Shopping</button>
+                        </div>
+                        <div class="col-sm-12 col-md-6 text-right">
+                            <button class="btn btn-lg btn-block btn-success text-uppercase">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>Je hebt nog geen producten toegevoegd... Winkel gauw verder!</p>
+    }
+
+</body>
 
     
-}
 
 
