@@ -25,10 +25,10 @@ namespace Webshop.Controllers
         }
 
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
 
-            var products = _unitOfWork.Products.GetAll();
+            var products = await _unitOfWork.Products.GetAll();
             return View(products);
 
         }

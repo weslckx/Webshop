@@ -1,17 +1,22 @@
-﻿@model ViewModels.ProductViewModels.ListProductViewModel
+﻿@*@model ViewModels.ProductViewModels.ListProductViewModel*@
+@model Webshop.HelperClasses.PaginatedList<Webshop.Domain.Models.Product>
+
+
 
 @{ ViewData["Title"] = "Home Page"; }
+@{ var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : ""; }
 
-<form asp-controller="Home" asp-action="Search" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Zoek op Artikel:
-            <input asp-for="ProductSearch" />
-            <input type="submit" value="Zoek product" class="btn btn-default" /> |
-            <a asp-controller="Home" asp-action="Index">Terug naar alle producten</a>
-        </p>
-    </div>
-</form>
+@*<form asp-controller="Home" asp-action="Search" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Zoek op Artikel:
+                <input asp-for="ProductSearch" />
+                <input type="submit" value="Zoek product" class="btn btn-default" /> |
+                <a asp-controller="Home" asp-action="Index">Terug naar alle producten</a>
+            </p>
+        </div>
+    </form>*@
 
 
 <table class="table">
@@ -26,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in Model.Products)
+        @foreach (var product in Model)
         {
 <tr>
 
@@ -46,3 +51,12 @@
 </tr>}
     </tbody>
 </table>
+
+
+@Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class=$"btn btn-default {prevDisabled}" })
+@Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex +1 }, new { @class = $"btn btn-default {nextDisabled}" })
+
+@*<a asp-action="Index" asp-route-pageNumber="@Model.PageIndex-1"
+   class="btn btn-default @prevDisabled">Previous</a>
+<a asp-action="Index" asp-route-pageNumber="@Model.PageIndex+1"
+   class="btn btn-default @nextDisabled">Next</a>*@ 

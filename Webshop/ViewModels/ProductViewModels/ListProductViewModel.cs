@@ -8,6 +8,6 @@ namespace ViewModels.ProductViewModels
     public class ListProductViewModel
     {
         public string ProductSearch { get; set; }
-        public List<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 }

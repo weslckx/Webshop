@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ViewModels.ProductViewModels;
 using Webshop.Data.Repositories;
+using Webshop.Domain.Models;
+using Webshop.HelperClasses;
 
 namespace Webshop.Controllers
 {
@@ -21,14 +23,22 @@ namespace Webshop.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int pageNumber=1)
         {
-            ListProductViewModel viewModel = new ListProductViewModel
-            {
-                Products = _unitOfWork.Products.GetAll().ToList()
-            };
 
-            return View(viewModel);
+            var products = await _unitOfWork.Products.GetAll();
+            var productList = products.ToList();
+
+            //var products = await _unitOfWork.Products.GetAll();
+
+            return View(await PaginatedList<Product>.CreateAsync(productList, pageNumber, 5));
+
+            //ListProductViewModel viewModel = new ListProductViewModel
+            //{
+            // Products= products
+            //};
+
+            //return View(viewModel);
         }
 
         public IActionResult Search(ListProductViewModel viewModel)

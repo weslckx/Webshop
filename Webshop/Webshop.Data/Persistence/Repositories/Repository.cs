@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 using Webshop.Data.Repositories;
 
 namespace Webshop.Data.Persistence.Repositories
@@ -24,10 +25,10 @@ namespace Webshop.Data.Persistence.Repositories
             return context.Set<TEntity>().Find(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
-        {
-            return context.Set<TEntity>().ToList();
-        }
+        //public IEnumerable<TEntity> GetAll()
+        //{
+        //    return context.Set<TEntity>().ToList();
+        //}
 
         // Add Item
         public void Add(TEntity entity)
@@ -47,6 +48,11 @@ namespace Webshop.Data.Persistence.Repositories
         public void Remove(TEntity entity)
         {
             context.Set<TEntity>().Remove(entity);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAll()
+        {
+            return await context.Set<TEntity>().ToListAsync();
         }
     }
 }
