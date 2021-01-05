@@ -1,11 +1,56 @@
 ﻿@model Webshop.Domain.Models.Product
 
-@{
-    ViewData["Title"] = "Details "+@Model.Name;
+@{ ViewData["Title"] = "Details " + @Model.Name; }
+
+
+<head>
+
+</head>
+
+<body>
+    <link rel="stylesheet" href="~/css/productdetail.css" />
+
+    <div class="container mt-5 mb-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="images p-3">
+                                <div class="text-center p-4"> <img id="main-image" src="@Model.ImageUrl" width="350" /> </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product p-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center"> <i class="fa fa-long-arrow-left"></i> <a href="" class="go_back">Terug</a> </div> <i class="fa fa-shopping-cart text-muted"></i>
+                                </div>
+                                <div class="mt-4 mb-3">
+                                    <span class="text-uppercase text-muted brand">De Bedrijvige Bij</span>
+                                    <h5 class="text-uppercase">@Model.Name</h5>
+                                    <div class="price d-flex flex-row align-items-center">
+                                        <span class="act-price">@Model.Price</span>
+                                    </div>
+                                </div>
+                                <p class="about">@Model.DescriptionLong</p>
+                                <div class="cart mt-4 align-items-center"><a class="btn-cart btn-sm btn-primary float-left" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">In winkelmand</a><i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+@section scripts{ 
+    <script type="text/javascript">
+        $(function () {
+            $('.go_back').click(function (e) {
+                e.preventDefault();
+                history.go(-1);
+            });
+        });
+    </script>
+
 }
-
-<h1>@Model.Name</h1>
-
-<div class="text-center">
-    <p>@Model.DescriptionLong</p>
-</div>
