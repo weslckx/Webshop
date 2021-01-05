@@ -29,6 +29,12 @@ namespace Webshop.Controllers
         public async Task<IActionResult> ViewOrders()
         {
             var orders = await _unitOfWork.Orders.GetAll();
+
+            if (orders==null)
+            {
+                return NotFound();
+            }
+
             OrderAdminViewModel viewModel = new OrderAdminViewModel
             {
                 Orders = orders
@@ -46,6 +52,10 @@ namespace Webshop.Controllers
             }
 
             var order = _unitOfWork.Orders.GetOrderWithProducts((int)id);
+
+            if (order == null)
+                return NotFound();
+
             return View(order);
         }
 
@@ -74,6 +84,11 @@ namespace Webshop.Controllers
         {
             var order = _unitOfWork.Orders.GetOrderWithProducts(id);
             var orderlines = _unitOfWork.OrderLines.Find(x => x.OrderId == id);
+
+            if (order == null || orderlines == null)
+                return NotFound();
+          
+
 
             foreach (var orderline in orderlines)
             {
