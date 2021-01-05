@@ -62,8 +62,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    @Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class = $"btnPage btn-outline-warning {prevDisabled}" })
-                    @Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex + 1 }, new { @class = $"btnPage btn-outline-warning {nextDisabled}" })
+                    @Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class = $"btn btn-outline-warning {prevDisabled}" })
+                    @Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex + 1 }, new { @class = $"btn btn-outline-warning {nextDisabled}" })
                 </div>
             </div>
         </div>

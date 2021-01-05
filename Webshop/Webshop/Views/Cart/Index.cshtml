@@ -31,7 +31,7 @@
 <body>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-    <section class="jumbotron text-center">
+    <section class="jumbotron text-center" style="border: solid 1px #1F1300; background-color:#DFD6A7;">
         <div class="container">
             <h1 class="jumbotron-heading">Jouw winkelmand</h1>
         </div>
@@ -57,14 +57,15 @@
                             <tbody>
                                 @foreach (var product in Model.cartItems)
                                 {
-                <tr>
-                    <td><img height="50" width="50" src="@product.Product.ImageUrl" /> </td>
-                    <td>@product.Product.Name</td>
-                    <td>€ @product.Product.Price</td>
-                    <td>@product.Quantity</td>
-                    <td class="text-right">@product.SubTotalText</td>
-                    <td class="text-right"><a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@product.Product.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> </td>
-                </tr>}
+                                    <tr>
+                                        <td><img height="50" width="50" src="@product.Product.ImageUrl" /> </td>
+                                        <td>@product.Product.Name</td>
+                                        <td>€ @product.Product.Price</td>
+                                        <td>@product.Quantity</td>
+                                        <td class="text-right">@product.SubTotalText</td>
+                                        <td class="text-right"><a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@product.Product.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td></td>
                                     <td></td>
@@ -82,13 +83,19 @@
                 <div class="col mb-2">
                     <div class="row">
                         <div class="col-sm-12  col-md-6">
-                            <button class="btn btn-block btn-light">Continue Shopping</button>
+                            @*<button class="btn btn-block btn-light">Verder winkelen</button>*@
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-block btn-light">Verder winkelen</a>
                         </div>
                         <div class="col-sm-12 col-md-6 text-right">
-                            <button class="btn btn-lg btn-block btn-success text-uppercase">Checkout</button>
+                            <a asp-controller="Cart" asp-action="PendingCheckout" class="btn btn-block btn-light">Bestellen</a>
+                            <br />
+                            <br />
+                            <br />
+                            <br />
                         </div>
                     </div>
                 </div>
+               
             </div>
         </div>
     }
