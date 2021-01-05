@@ -25,6 +25,17 @@ namespace Webshop.Data.Persistence.Repositories
             
         }
 
+        public Order GetOrderWithProducts(int id)
+        {
+            var order = shopDbContext.Orders
+                .Where(c => c.Id == id)
+                .Include(order=>order.OrderLines)
+                .ThenInclude(order=>order.Product)
+                .SingleOrDefault();
+
+            return order;
+        }
+
         public ShopDbContext shopDbContext
         {
             get { return context as ShopDbContext; }

@@ -10,6 +10,8 @@ namespace Webshop.Data.Repositories
         ICustomerRepository Customers { get; }
 
         IOrderRepository Orders { get; }
+
+        IOrderLinesRepository OrderLines { get; }
         int Complete();
     }
 }

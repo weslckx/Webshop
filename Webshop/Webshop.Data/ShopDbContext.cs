@@ -19,6 +19,9 @@ namespace Webshop.Data
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderDetail> OrderLines { get; set; }
+
+
 
 
         //Old way: DBcontext uses his method OnModelCreating with param ModelBuilder. Is called when context is first created
