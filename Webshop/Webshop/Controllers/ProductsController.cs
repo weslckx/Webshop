@@ -94,7 +94,7 @@ namespace Webshop.Controllers
             }
 
 
-            return RedirectToAction("Index", "Products");
+            return RedirectToAction("Index", "Home");
         }
         [AllowAnonymous]
         public ActionResult ProductDetails(int id)

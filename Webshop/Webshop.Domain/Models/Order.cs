@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Webshop.Domain.Models
@@ -16,6 +17,15 @@ namespace Webshop.Domain.Models
         //public decimal OrderTotal { get; set; }
         public List<OrderDetail> OrderLines { get; set; }
         public int? CustomerId { get; set; } // nullable?
+       
+        [NotMapped]
+        public string IsCustomer 
+        { 
+            get {
+
+                return CustomerId!=null? "Geregistreerd": "Niet-geregistreerd";
+            } 
+        }
 
     }
 }

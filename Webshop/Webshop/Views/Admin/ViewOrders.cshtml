@@ -308,7 +308,8 @@ $(document).ready(function(){
                         <tr>
                             <th>OrderID</th>
                             <th>Customer</th>
-                            <th>Location</th>
+                            <th>Type klant</th>
+                            <th>Adres</th>
                             <th>Order Date</th>
                             <th>Status</th>
                             <th></th> 
@@ -319,16 +320,17 @@ $(document).ready(function(){
                     <tbody>
                         @foreach (var order in Model.Orders)
                         {
-                        <tr>
-                            <td>@order.Id</td>
-                            <td>@order.LastName @order.FirstName</td>
-                            <td>@order.Address @order.ZipCode</td>
-                            <td>@order.OrderPlaced</td>
-                            <td><span class="status text-success">&bull;</span> Ontvangen</td>
-                            <td>@order.OrderLines</td>
-                            <td><a asp-action="ViewOrderDetail" asp-controller="Admin" asp-route-id="@order.Id" class="view" title="View Details" data-toggle="tooltip"><i class="material-icons">&#xE5C8;</i></a></td>
-                            <td><a asp-action="Delete" asp-controller="Admin" asp-route-id="@order.Id" class="view" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xe5c9;</i></a></td>
-                        </tr>
+                            <tr>
+                                <td>@order.Id</td>
+                                <td>@order.LastName @order.FirstName</td>
+                                <td>@order.IsCustomer</td>
+                                <td>@order.Address @order.ZipCode</td>
+                                <td>@order.OrderPlaced</td>
+                                <td><span class="status text-success">&bull;</span> Ontvangen</td>
+                                <td>@order.OrderLines</td>
+                                <td><a asp-action="ViewOrderDetail" asp-controller="Admin" asp-route-id="@order.Id" class="view" title="View Details" data-toggle="tooltip"><i class="material-icons">&#xE5C8;</i></a></td>
+                                <td><a asp-action="Delete" asp-controller="Admin" asp-route-id="@order.Id" class="view" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xe5c9;</i></a></td>
+                            </tr>
                         }
                     </tbody>
                 </table>
