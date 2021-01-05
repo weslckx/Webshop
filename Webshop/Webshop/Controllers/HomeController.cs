@@ -54,7 +54,14 @@ namespace Webshop.Controllers
 
         public IActionResult Privacy()
         {
+            throw new Exception();
             return View();
+        }
+
+        [Route("/Home/HandleError/{code:int}")]
+        public IActionResult Error()
+        {
+            return View("404");
         }
     }
 }
