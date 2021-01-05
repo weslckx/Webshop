@@ -14,9 +14,16 @@ namespace ViewModels
         {
             get
             {
-
                 return (double)Product.Price * Quantity;
             } 
+        }
+
+        public string SubTotalText
+        {
+            get
+            {
+                return SubTotal.ToString("€ "+"0.00");
+            }
         }
 
     }

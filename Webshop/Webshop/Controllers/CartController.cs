@@ -68,7 +68,7 @@ namespace Webshop.Controllers
 
             AddToCart(cartItem);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cart");
         }
 
         public IActionResult RemoveFromCart(int? id)

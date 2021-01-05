@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Webshop.Data.Repositories
 {
@@ -9,7 +10,9 @@ namespace Webshop.Data.Repositories
     {
         //Getting items
         TEntity Get(int id);
-        IEnumerable<TEntity> GetAll();
+        //IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
+
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         //Adding item

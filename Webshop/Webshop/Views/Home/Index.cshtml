@@ -1,42 +1,91 @@
-﻿@model IEnumerable<Webshop.Domain.Models.Product>
+﻿@*@model ViewModels.ProductViewModels.ListProductViewModel*@
+@model Webshop.HelperClasses.PaginatedList<Webshop.Domain.Models.Product>
 
-@{
-    ViewData["Title"] = "Home Page";
+
+
+@{ ViewData["Title"] = "Home Page"; }
+@{ var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : ""; }
+
+@*<form asp-controller="Home" asp-action="Search" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Zoek op Artikel:
+                <input asp-for="ProductSearch" />
+                <input type="submit" value="Zoek product" class="btn btn-default" /> |
+                <a asp-controller="Home" asp-action="Index">Terug naar alle producten</a>
+            </p>
+        </div>
+    </form>*@
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="~/css/products.css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+
+
+        <div class="row">
+
+            @foreach (var product in Model)
+            {
+    <div class="col-md-4">
+        <a class="product" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">
+            <figure class="card card-product">
+                <div class="img-wrap"><img src="@product.ImageUrl"></div>
+                <figcaption class="info-wrap">
+                    <h4 class="title">@product.Name</h4>
+                    <p class="desc">@product.DescriptionShort</p>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <div class="admin-wrap">
+                            <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk product</a> |
+                            <a asp-controller="Products" asp-action="DeleteProduct" asp-route-id="@product.Id">Delete product</a>
+                        </div> <!-- rating-wrap.// -->
+                    }
+                </figcaption>
+                <div class="bottom-wrap">
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id" class="btn-cart btn-sm btn-primary float-right">In winkelmand</a>
+                    <div class="price-wrap h5">
+                        <span class="price-new">€ @product.Price</span> <del class="price-old"></del>
+                    </div> <!-- price-wrap.// -->
+                </div> <!-- bottom-wrap.// -->
+            </figure>
+        </a>
+    </div> <!-- col // -->}
+
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    @Html.ActionLink("Vorige Pagina", "Index", new { pageNumber = Model.PageIndex - 1 }, new { @class = $"btn btn-outline-warning {prevDisabled}" })
+                    @Html.ActionLink("Volgende Pagina", "Index", new { pageNumber = Model.PageIndex + 1 }, new { @class = $"btn btn-outline-warning {nextDisabled}" })
+                </div>
+            </div>
+        </div>
+
+         
+        
+        <br />
+        <br />
+        <br />
+    </div>
+
+    
+</body>
+
+@section scripts{ 
+    <script>
+        $(document).ready(function () {
+            $(".btn-cart").click(function () {
+                alert("Toegevoegd aan winkelkar");
+            });
+        });
+    </script>
 }
 
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ProductId</th>
-            <th scope="col">Naam</th>
-            <th scope="col">Prijs</th>
-            <th scope="col">Korte omschrijving</th>
-            <th scope="col">Afbeelding</th>
-            <th scope="col">Detail</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-                <tr>
-
-                    <th scope="col">@product.Id</th>
-                    <th scope="col">@product.Name</th>
-                    <th scope="col">@product.Price</th>
-                    <th scope="col">@product.DescriptionShort</th>
-                    <th scope="col"><img src="@product.ImageUrl" width="125" height="100" /></th>
-                    <th scope="col">
-                        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">Bekijk dit product!</a> <br />
-                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Voeg toe aan winkelmandje!</a> <br />
-                        @if (this.User.IsInRole("Admin"))
-                        {
-                    <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@product.Id">Bewerk dit product!</a>}
-                    </th>
-
-                </tr>
-
-        }
-    </tbody>
-</table>
