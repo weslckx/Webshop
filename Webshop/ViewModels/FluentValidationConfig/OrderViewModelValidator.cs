@@ -39,7 +39,7 @@ namespace ViewModels.FluentValidationConfig
 
                 return true;
             }
-            catch (FormatException)
+            catch (Exception)
             {
 
                 return false;
