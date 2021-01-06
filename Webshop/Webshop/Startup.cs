@@ -19,6 +19,7 @@ using FluentValidation;
 using ViewModels.ProductViewModels;
 using ViewModels.FluentValidationConfig;
 using Microsoft.AspNetCore.Http;
+using ViewModels;
 
 namespace Webshop
 {
@@ -51,7 +52,9 @@ namespace Webshop
 
             services.AddControllersWithViews().AddFluentValidation();
 
+            //FluentValidation
             services.AddTransient<IValidator<ProductFormViewModel>, ProductFormViewModelValidator>();
+            services.AddTransient<IValidator<OrderViewModel>, OrderViewModelValidator>();
 
 
 
