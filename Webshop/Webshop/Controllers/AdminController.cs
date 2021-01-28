@@ -103,7 +103,31 @@ namespace Webshop.Controllers
             
         }
 
+        public ActionResult DeleteProduct(int? id)
+        {
+            if (id == null)
+                return NotFound();
 
-      
+            var product = _unitOfWork.Products.Get((int)id);
+
+            if (product == null)
+                return NotFound();
+
+            return View(product);
+
+        }
+
+        [HttpPost, ActionName("DeleteProduct")]
+        public ActionResult DeleteProductConfirmed(int id)
+        {
+            var product = _unitOfWork.Products.Get(id);
+            _unitOfWork.Products.Remove(product);
+            _unitOfWork.Complete();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
     }
 }

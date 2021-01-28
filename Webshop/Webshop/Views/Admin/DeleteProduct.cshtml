@@ -1,0 +1,19 @@
+﻿@model Webshop.Domain.Models.Product
+
+<h1>Danger zone - verwijder product</h1>
+
+<p>Ben je zeker dat je product @Model.Name wilt verwijderen?</p>
+
+<hr />
+
+<h2>Product Details</h2>
+
+<p>Naam: @Model.Name</p>
+<p>Details: @Model.DescriptionShort </p>
+
+<form asp-action="DeleteProduct">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a asp-action="Index" asp-controller="Home">Back to List</a>
+</form>
+
