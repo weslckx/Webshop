@@ -21,7 +21,8 @@ namespace Webshop.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+    
+        public IActionResult Index(CustomerViewModel vm)
         {
             var webshopUserId=_userManager.GetUserId(User);
             Customer customer = _unitOfWork.Customers.GetCustomerByWebShopId(webshopUserId);
@@ -38,6 +39,37 @@ namespace Webshop.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditData(CustomerViewModel vm)
+        {
+            if (vm == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                var webshopUserId = _userManager.GetUserId(User);
+                var customerInDb = _unitOfWork.Customers.GetCustomerByWebShopId(webshopUserId);
+
+                if (customerInDb == null)
+                    return NotFound();
+
+                customerInDb.FirstName = vm.Customer.FirstName;
+                customerInDb.LastName = vm.Customer.LastName;
+                customerInDb.Address = vm.Customer.Address;
+                customerInDb.Zipcode = vm.Customer.Zipcode;
+
+                _unitOfWork.Complete();
+
+                return View();
+            
+            }
+
+
+            return View("Index", vm);
+
         }
     }
 }

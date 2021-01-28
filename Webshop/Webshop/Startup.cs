@@ -160,7 +160,7 @@ namespace Webshop
 
 
             // Create adminuser
-           // CreateUserRoles(serviceProvider).Wait();
+           //CreateUserRoles(serviceProvider).Wait();
         }
 
 
@@ -180,7 +180,7 @@ namespace Webshop
                 roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
             }
             // Assign Admin role to the main user.
-            IdentityUser user = Context.Users.FirstOrDefault(u => u.Email == "email@example.com"); //email from admin
+            IdentityUser user = Context.Users.FirstOrDefault(u => u.Email == "wouters.danny@example.com"); //email from admin
             if (user != null)
             {
                 DbSet<IdentityUserRole<string>> userRoles = Context.UserRoles;
