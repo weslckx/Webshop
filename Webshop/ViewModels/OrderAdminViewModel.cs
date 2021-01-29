@@ -8,5 +8,6 @@ namespace ViewModels
     public class OrderAdminViewModel
     {
         public IEnumerable<Order> Orders { get; set; }
+        public string OrderSearch { get; set; }
     }
 }

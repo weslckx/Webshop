@@ -54,9 +54,9 @@
 
                 @foreach (var item in Model.Cart)
                 {
-    <p>@item.Product.Name</p>
-                    <p>@item.Product.Price</p>
-                                    <p>@item.Quantity</p>}
+                    <p>Product: @item.Product.Name</p>
+                    <p>Prijs per stuk: @item.Product.Price</p>
+                    <p>Hoeveelheid @item.Quantity</p>}
 
             </div>
 

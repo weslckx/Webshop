@@ -44,6 +44,21 @@ namespace Webshop.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> SearchOrders(OrderAdminViewModel vm)
+        {
+            if (!string.IsNullOrWhiteSpace(vm.OrderSearch))
+            {
+                vm.Orders = _unitOfWork.Orders.Find(o => o.LastName.Contains(vm.OrderSearch)).ToList();
+            }
+            else
+            {
+                var orders = await _unitOfWork.Orders.GetAll();
+                vm.Orders = orders;
+            }
+
+            return View("ViewOrders",vm);
+        }
+
         public IActionResult ViewOrderDetail(int? id)
         {
             if (id==null)
